@@ -6,6 +6,7 @@ const statusService = require('@services/apis/status')
 const cancelService = require('@services/apis/cancel')
 const searchService = require('@services/apis/search')
 const initService = require('@services/apis/init')
+const sessionService = require('@services/sessionUpdate')
 
 exports.search = async (req, res) => {
 	try {
@@ -56,6 +57,16 @@ exports.status = async (req, res) => {
 	try {
 		res.status(200).send(responses.success_ack)
 		await statusService.status(req.body)
+	} catch (err) {
+		console.log(err)
+	}
+}
+
+exports.sessionUpdate = async (req, res) => {
+	try {
+		console.debug(JSON.stringify(req.body, null, '\t'))
+		res.status(200).send(responses.success_ack)
+		await sessionService.session(req.body)
 	} catch (err) {
 		console.log(err)
 	}
