@@ -47,12 +47,12 @@ exports.onStatus = async (callbackData) => {
 				display: true,
 				descriptor: {
 					code: 'discordInviteLink',
-					name: 'discordInviteLink',
+					name: 'Discord Invite Link',
 				},
 				list: [
 					{
 						descriptor: {
-							code: sessionDetails?.inviteLink,
+							code: 'discordInviteLink',
 							name: sessionDetails?.inviteLink,
 						},
 					},
@@ -67,7 +67,7 @@ exports.onStatus = async (callbackData) => {
 				list: [
 					{
 						descriptor: {
-							code: sessionTranscript?.recordingURL,
+							code: 'sessionVideoURL',
 							name: sessionTranscript?.recordingURL,
 						},
 					},
@@ -82,7 +82,7 @@ exports.onStatus = async (callbackData) => {
 				list: [
 					{
 						descriptor: {
-							code: sessionTranscript?.sessionTranscript,
+							code: 'sessionTranscript',
 							name: sessionTranscript?.sessionTranscript,
 						},
 					},
