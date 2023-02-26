@@ -1,6 +1,6 @@
 'use strict'
 
-exports.onStatusRequestDTO = async (context, statusBody, orderId, status) => {
+exports.onStatusRequestDTO = async (context, fulfillmentTags, statusBody, orderId, status) => {
 	return {
 		context,
 		message: {
@@ -9,6 +9,9 @@ exports.onStatusRequestDTO = async (context, statusBody, orderId, status) => {
 				state: status,
 				type: 'DEFAULT',
 				provider: statusBody,
+				fulfillments: {
+					tags: fulfillmentTags,
+				},
 			},
 		},
 	}

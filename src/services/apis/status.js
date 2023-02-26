@@ -8,7 +8,8 @@ exports.status = async (requestBody) => {
 	try {
 		const context = requestBody.context
 		const message = requestBody.message
-		const orderId = message.order_id
+		const orderId = message.order.id
+		console.log(orderId)
 		const sessionAttendanceDoc = await sessionAttendanceQueries.findByOrderId(orderId)
 		if (!sessionAttendanceDoc) return console.log('SessionAttendance Not Found')
 		console.log(sessionAttendanceDoc)

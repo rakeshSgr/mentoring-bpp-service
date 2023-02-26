@@ -4,6 +4,8 @@ const { internalRequests } = require('@helpers/requests')
 const { contextBuilder } = require('@utils/contextBuilder')
 const { onStatusRequestDTO } = require('@dtos/onStatusRequest')
 const { externalRequests } = require('@helpers/requests')
+const sessionQueries = require('@database/storage/sessions/queries')
+const sessionTranscriptQueries = require('@database/storage/sessionTranscript/queries')
 
 exports.onStatus = async (callbackData) => {
 	try {
@@ -21,9 +23,76 @@ exports.onStatus = async (callbackData) => {
 				fulfillmentId: callbackData.fulfillmentId,
 			},
 		})
+		//const sessionDetails = await sessionQueries.findBySessionId(callbackData.sessionId)
+		const sessionDetails = await sessionQueries.findSessionById(callbackData.sessionId)
+		const sessionTranscript = await sessionTranscriptQueries.findOne({ sessionId: callbackData.sessionId })
+
+		const fulfillmentTags = [
+			{
+				display: true,
+				descriptor: {
+					code: 'sessionSummary',
+					name: 'Session Summary',
+				},
+				list: [
+					{
+						descriptor: {
+							code: 'sessionSummary',
+							name: sessionDetails.summary,
+						},
+					},
+				],
+			},
+			{
+				display: true,
+				descriptor: {
+					code: 'discordInviteLink',
+					name: 'discordInviteLink',
+				},
+				list: [
+					{
+						descriptor: {
+							code: sessionDetails?.inviteLink,
+							name: sessionDetails?.inviteLink,
+						},
+					},
+				],
+			},
+			{
+				display: true,
+				descriptor: {
+					code: 'sessionVideoURL',
+					name: 'Downloadable session video URL ',
+				},
+				list: [
+					{
+						descriptor: {
+							code: sessionTranscript?.recordingURL,
+							name: sessionTranscript?.recordingURL,
+						},
+					},
+				],
+			},
+			{
+				display: true,
+				descriptor: {
+					code: 'sessionTranscript',
+					name: 'Session transcript',
+				},
+				list: [
+					{
+						descriptor: {
+							code: sessionTranscript?.sessionTranscript,
+							name: sessionTranscript?.sessionTranscript,
+						},
+					},
+				],
+			},
+		]
 		const statusBody = response.statusBody
 		const onStatusRequest = await onStatusRequestDTO(
 			context,
+			fulfillmentTags,
 			statusBody.providers[0],
 			callbackData.orderId,
 			callbackData.status
